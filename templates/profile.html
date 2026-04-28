@@ -1,0 +1,14 @@
+<h2>Student Profile</h2>
+
+<p>Name: {{ student.name }}</p>
+<p>Roll: {{ student.roll_number }}</p>
+<p>Mobile: {{ student.mobile }}</p>
+<p>Email: {{ student.email }}</p>
+
+<h3>Course</h3>
+<p>{{ course.course_name }} - Semester {{ course.semester }}</p>
+
+<h3>Attendance</h3>
+{% for a in attendance %}
+<p>{{ a.date }} - {{ a.status }}</p>
+{% endfor %}

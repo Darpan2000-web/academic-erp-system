@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Student</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(to right, #667eea, #764ba2);
+        }
+
+        .card {
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg">
+
+        <!-- HEADER -->
+        <div class="card-header bg-dark text-white text-center">
+            🔍 Student Search System
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body">
+
+            <!-- SEARCH BAR -->
+            <form method="POST" class="mb-4">
+                <div class="input-group">
+                    <input name="keyword" class="form-control"
+                           placeholder="Search by ID / Name / Academic Year">
+                    <button class="btn btn-primary">Search</button>
+                </div>
+            </form>
+
+            <!-- RESULT TABLE -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Roll</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Semester</th>
+                            <th>Year</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for s in results %}
+                        <tr>
+                            <td>{{ s.student_id }}</td>
+                            <td>{{ s.name }}</td>
+                            <td>{{ s.roll_number }}</td>
+                            <td>{{ s.mobile }}</td>
+                            <td>{{ s.email }}</td>
+                            <td>Sem {{ s.semester }}</td>
+                            <td>{{ s.academic_year }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+            <!-- BACK BUTTON -->
+            <div class="text-center mt-3">
+                <a href="/" class="btn btn-secondary">⬅ Back to Dashboard</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

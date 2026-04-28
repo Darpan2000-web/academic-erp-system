@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CST Department</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+
+    <!-- TITLE -->
+    <h2 class="text-center mb-4">🎓 CST Department</h2>
+
+    <!-- 🔥 ACTION BUTTONS -->
+    <div class="mb-3 text-center">
+        <a href="/add" class="btn btn-success">➕ Add Student</a>
+        <a href="/attendance" class="btn btn-primary">📊 Attendance</a>
+        <a href="/search" class="btn btn-warning">🔍 Search</a>
+        <a href="/export" class="btn btn-dark">📥 Download Records</a>
+        <a href="/logout" class="btn btn-danger">🚪 Logout</a>
+    </div>
+
+    <!-- 🔥 CARDS -->
+    <div class="row text-center mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow bg-primary text-white p-3">
+                <h5>Total Students</h5>
+                <h2>{{ total_students }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow bg-success text-white p-3">
+                <h5>Total Present</h5>
+                <h2>{{ total_present }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow bg-warning text-dark p-3">
+                <h5>Attendance %</h5>
+                <h6>Sem 4: {{ sem4_percent }}%</h6>
+                <h6>Sem 6: {{ sem6_percent }}%</h6>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 🔥 MAIN SECTION -->
+    <div class="row">
+
+        <!-- LEFT: CHART -->
+        <div class="col-md-4">
+            <div class="card shadow p-3">
+                <canvas id="chart"></canvas>
+            </div>
+        </div>
+
+        <!-- RIGHT: TABLE -->
+        <div class="col-md-8">
+
+            <!-- SEARCH FILTER -->
+            <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search student...">
+
+            <div class="card shadow">
+                <div class="card-body">
+
+                    <table class="table table-bordered table-hover" id="studentTable">
+
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Roll</th>
+                                <th>Semester</th>
+                                <th>Year</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for s in students %}
+                            <tr>
+                                <td>{{ s.student_id }}</td>
+                                <td>{{ s.name }}</td>
+                                <td>{{ s.roll_number }}</td>
+                                <td>{{ s.semester }}</td>
+                                <td>{{ s.academic_year }}</td>
+                                <td>
+                                    <a href="/edit/{{ s.student_id }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="/delete/{{ s.student_id }}" class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Delete student?')">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+
+                    <!-- PAGINATION -->
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 🔥 JAVASCRIPT -->
+
+<script>
+// SEARCH FILTER
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#studentTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+
+// CHART
+new Chart(document.getElementById("chart"), {
+    type: 'bar',
+    data: {
+        labels: ['Students', 'Present'],
+        datasets: [{
+            label: 'ERP Stats',
+            data: [
+                Number("{{ total_students }}"),
+                Number("{{ total_present }}")
+            ]
+        }]
+    }
+});
+
+// PAGINATION
+let rows = document.querySelectorAll("#studentTable tbody tr");
+let perPage = 5;
+
+function showPage(page) {
+    rows.forEach((row, index) => {
+        row.style.display = (index >= (page-1)*perPage && index < page*perPage) ? "" : "none";
+    });
+}
+
+function setupPagination() {
+    let pageCount = Math.ceil(rows.length / perPage);
+    let pagination = document.getElementById("pagination");
+
+    for (let i = 1; i <= pageCount; i++) {
+        let li = document.createElement("li");
+        li.className = "page-item";
+
+        let a = document.createElement("a");
+        a.className = "page-link";
+        a.innerText = i;
+
+        a.onclick = () => showPage(i);
+
+        li.appendChild(a);
+        pagination.appendChild(li);
+    }
+}
+
+setupPagination();
+showPage(1);
+</script>
+
+</body>
+</html>

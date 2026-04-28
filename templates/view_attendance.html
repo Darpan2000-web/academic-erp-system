@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Attendance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+            🔍 Check Attendance by Date
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST" class="mb-3">
+                <input type="date" name="date" class="form-control mb-2">
+                <button class="btn btn-primary">Search</button>
+            </form>
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Semester</th>
+                    <th>Present Students</th>
+                </tr>
+
+                {% for r in results %}
+                <tr>
+                    <td>Sem {{ r.semester }}</td>
+                    <td>{{ r.present_count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <a href="/attendance" class="btn btn-secondary">Back</a>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
